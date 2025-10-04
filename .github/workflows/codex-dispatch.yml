@@ -1,0 +1,61 @@
+name: Dispatch Codex on Ready
+on:
+  issues:
+    types: [labeled, opened, edited]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+jobs:
+  open-draft-pr-and-summon:
+    if: contains(github.event.issue.labels.*.name, 'codex:ready')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prepare branch and sentinel commit
+        env:
+          ISSUE_NUM: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          REPO: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          BRANCH="codex/issue-${ISSUE_NUM}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH" "origin/${BASE_BRANCH}"
+          mkdir -p .codex/tasks
+          cat > ".codex/tasks/issue-${ISSUE_NUM}.md" <<'EOF'
+          # Codex Task Bootstrap
+          ## Issue
+          ${{ github.event.issue.html_url }}
+          ## Title
+          ${{ github.event.issue.title }}
+          ## Body
+          ${{ github.event.issue.body }}
+          ## Notes
+          - Use the issue body as spec.
+          - Respect any path allowlist and branch hints.
+          EOF
+          git add .codex/tasks/issue-${ISSUE_NUM}.md
+          git commit -m "chore: codex bootstrap for issue #${ISSUE_NUM}"
+          git push --set-upstream origin "$BRANCH"
+          PR_URL=$(gh pr create \
+            --repo "$REPO" \
+            --base "${BASE_BRANCH}" \
+            --head "$BRANCH" \
+            --draft \
+            --title "Codex: Issue #${ISSUE_NUM} — ${ISSUE_TITLE}" \
+            --body $'Closes #${ISSUE_NUM}\n\nBootstrap PR for Codex Cloud. See `.codex/tasks/issue-'"${ISSUE_NUM}"'.md` for the spec snapshot.' \
+            --json url --jq .url)
+          echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
+      - name: Summon Codex on the PR
+        env:
+          PR_URL: ${{ env.PR_URL }}
+        run: |
+          gh pr comment "$PR_URL" --body "@codex review"
+

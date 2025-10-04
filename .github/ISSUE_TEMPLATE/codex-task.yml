@@ -1,0 +1,84 @@
+name: Codex Task
+description: Structured task for Codex Cloud
+title: "[Codex] <short title>"
+labels: ["codex:ready","automation"]
+body:
+  - type: input
+    id: objective
+    attributes:
+      label: Objective
+      description: One sentence outcome
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: Light Spec
+      description: Steps / constraints / files to touch
+      value: |
+        ## Context
+        - repo: <name>
+        - branch: <branch>
+        - path-allowlist:
+          - api/
+          - docs/
+        ## Steps
+        1) ...
+        2) ...
+        ## Acceptance
+        - [ ] unit tests updated
+        - [ ] docs updated
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      options: ["S","M","L"]
+  - type: textarea
+    id: tests
+    attributes:
+      label: Commands to Validate
+      value: |
+        - run: pytest -q
+        - run: make docs
+  - type: input
+    id: branch
+    attributes:
+      label: Target branch
+      placeholder: feature/docs-sprint
+
+  # --- Codex Cloud Task Preamble (optional, but recommended) ---
+  - type: textarea
+    id: preamble_env
+    attributes:
+      label: Codex Cloud Task Preamble — Environment
+      description: Env vars, runner flags, or tool versions required
+      placeholder: |
+        export VECTOR_MACHINE_FORCE_CPU=true
+        export CUDA_VISIBLE_DEVICES=""
+  - type: textarea
+    id: preamble_setup
+    attributes:
+      label: Codex Cloud Task Preamble — Setup
+      description: One-time fetch/branch, create working branch, install deps
+      placeholder: |
+        git fetch -p && git checkout main && git pull --rebase origin main
+        git checkout -b codex/<short-branch>
+  - type: textarea
+    id: preamble_tasks
+    attributes:
+      label: Codex Cloud Task Preamble — Tasks
+      description: Bullet list of concrete steps Codex should follow
+      placeholder: |
+        - Inventory why test X is skipped
+        - Provide CPU-only alternative for Y
+        - Remove skip guard and run unit gate
+  - type: textarea
+    id: preamble_artifacts
+    attributes:
+      label: Codex Cloud Task Preamble — Artifacts
+      description: Files, logs, or docs Codex should produce
+      placeholder: |
+        - Updated tests/<path>/conftest.py
+        - Proof of passing test run
+        - Docs updates if applicable
+

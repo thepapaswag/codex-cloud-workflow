@@ -1,0 +1,24 @@
+name: Spec Police
+on:
+  pull_request:
+    types: [opened, synchronize]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  scope-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Enforce path allowlist (example: api/ and docs/)
+        run: |
+          ALLOWLIST_REGEX="^(api/|docs/)"
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }})
+          echo "$CHANGED" | grep -vE "$ALLOWLIST_REGEX" && {
+            echo "Touched files outside allowlist"; exit 1; } || true
+      - name: Run validation commands
+        run: |
+          pytest -q
+          make -s docs
+
