@@ -19,6 +19,12 @@ make proof
 make batch
 ```
 
+## Cloud Environment (CPU-only)
+- See `docs/cloud-environment.md` for details.
+- In issues, include in the Preamble:
+  - Environment: `source .codex/cloud.env`
+  - Setup: `bash .codex/setup.sh`
+
 ## Files Added by the Bootstrap
 - `.github/ISSUE_TEMPLATE/codex-task.yml` — machine‑readable issue form with Preamble
 - `.github/workflows/codex-dispatch.yml` — Issue→draft PR bridge + `@codex review`
@@ -29,9 +35,11 @@ make batch
 - `templates/issue_body.md` — issue body template for envsubst
 - `AGENTS.md` — human + machine‑readable standards (YAML block)
 - `Makefile` — `codex-bootstrap`, `labels`, `proof`, `batch`
+ - `.codex/cloud.env` — CPU-only defaults
+ - `.codex/setup.sh` — dependency bootstrapper
+ - `docs/cloud-environment.md` — guidance and examples
 
 ## Notes
 - CI commands in `spec-police.yml` are placeholders; tailor to your stack.
 - Keep diffs small and pin the target branch in specs; Codex Cloud crawls the remote repo/branch.
 - No secrets or environment‑specific credentials should be committed to this repo.
-

@@ -53,8 +53,8 @@ body:
       label: Codex Cloud Task Preamble — Environment
       description: Env vars, runner flags, or tool versions required
       placeholder: |
-        export VECTOR_MACHINE_FORCE_CPU=true
-        export CUDA_VISIBLE_DEVICES=""
+        # CPU-only defaults
+        source .codex/cloud.env
   - type: textarea
     id: preamble_setup
     attributes:
@@ -63,6 +63,7 @@ body:
       placeholder: |
         git fetch -p && git checkout main && git pull --rebase origin main
         git checkout -b codex/<short-branch>
+        bash .codex/setup.sh
   - type: textarea
     id: preamble_tasks
     attributes:
@@ -81,4 +82,3 @@ body:
         - Updated tests/<path>/conftest.py
         - Proof of passing test run
         - Docs updates if applicable
-

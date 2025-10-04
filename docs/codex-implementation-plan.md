@@ -108,6 +108,10 @@ Acceptance mapping:
   2) Ensure Actions token permissions match workflows
   3) Connect repo to Codex Cloud so `@codex` on PRs works
 - [x] Explain `make codex-bootstrap`, `make labels`, `make proof`, `make batch`.
+ - [x] Add `docs/cloud-environment.md` and reference from README.
+ - [x] Add `.codex/cloud.env` and `.codex/setup.sh` with CPU-only defaults.
+ - [x] Update Issue Form placeholders to source `.codex/cloud.env` and run `.codex/setup.sh`.
+ - [x] Add environment hints to `AGENTS.md` YAML.
 
 Acceptance mapping:
 - README contains required reminders (DoD: Safety & Public Readiness)
@@ -176,3 +180,27 @@ Acceptance mapping:
 - Assume GitHub Free; Actions minutes limited on private repos.
 - Push early and pin branch in prompts; Codex Cloud crawls remote.
 - Keep diffs small; follow conventional commits; respect allowlists.
+
+---
+
+## Validation Plan (Codex Connected)
+
+Goal: demonstrate that a typical downstream project can run Codex Cloud tasks CPU-only, with predictable dependency setup and zero-click bridge behavior.
+
+Checklist
+- [ ] Create an issue via the form that updates a doc only, with Preamble:
+  - Environment: `source .codex/cloud.env`
+  - Setup: `bash .codex/setup.sh`
+- [ ] Confirm the dispatch workflow creates `codex/issue-<n>` and (if permitted) a draft PR; otherwise, it comments instructions.
+- [ ] Open the PR manually if auto-creation is blocked; comment `@codex review`.
+- [ ] Observe Codex Cloud execution; verify it sources `.codex/cloud.env` and runs `.codex/setup.sh` (artifacts/logs or PR comments).
+- [ ] Ensure the change is limited to allowlisted paths; CI/Spec Police behavior is as expected.
+- [ ] Merge the PR.
+
+Batch path
+- [ ] Prepare a multi-row `codex_tasks.csv` and matching `.codex/preambles/*.md` entries that include the Environment/Setup Preamble.
+- [ ] Run `make batch` to create issues; observe dispatch and proceed as above.
+
+Troubleshooting
+- [ ] If Node/Go managers aren’t present in Cloud, limit tasks to Python or add explicit manager install steps in the Issue Preamble.
+- [ ] If a project needs GPU, mark those tasks out of scope for Codex Cloud or create a separate, GPU-capable path.

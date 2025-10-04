@@ -21,6 +21,10 @@ codex:
   path_allowlist:
     - api/
     - docs/
+  environment:
+    cpu_only: true
+    setup_scripts:
+      - .codex/setup.sh
   pr_limits:
     max_changed_lines: 300
     separate_refactor_prs: true
@@ -67,4 +71,3 @@ codex:
       - CONTRIBUTING.md
     archive_dir: docs/historical/
 ```
-
