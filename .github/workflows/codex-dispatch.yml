@@ -44,16 +44,26 @@ jobs:
           git add .codex/tasks/issue-${ISSUE_NUM}.md
           git commit -m "chore: codex bootstrap for issue #${ISSUE_NUM}"
           git push --force-with-lease --set-upstream origin "$BRANCH"
-          PR_URL=$(gh pr create \
+          # Try to create a draft PR; if forbidden by org policy, fall back to issue comment with manual instructions.
+          set +e
+          CREATE_OUT=$(gh pr create \
             --repo "$REPO" \
             --base "${BASE_BRANCH}" \
             --head "$BRANCH" \
             --draft \
             --title "Codex: Issue #${ISSUE_NUM} — ${ISSUE_TITLE}" \
-            --body $'Closes #${ISSUE_NUM}\n\nBootstrap PR for Codex Cloud. See `.codex/tasks/issue-'"${ISSUE_NUM}"'.md` for the spec snapshot.' \
-            | tail -n1)
-          echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
+            --body $'Closes #${ISSUE_NUM}\n\nBootstrap PR for Codex Cloud. See `.codex/tasks/issue-'"${ISSUE_NUM}"'.md` for the spec snapshot.' 2>&1)
+          STATUS=$?
+          set -e
+          if [ $STATUS -eq 0 ]; then
+            PR_URL=$(echo "$CREATE_OUT" | tail -n1)
+            echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
+          else
+            echo "PR_URL=" >> "$GITHUB_ENV"
+            gh issue comment "$ISSUE_NUM" --body $'Could not auto-create PR (likely org policy). Branch created: `codex/issue-'"${ISSUE_NUM}"'`.\n\nPlease open a PR from that branch into `'$BASE_BRANCH'` and comment `@codex review` on the PR.'
+          fi
       - name: Summon Codex on the PR
+        if: ${{ env.PR_URL != '' }}
         env:
           PR_URL: ${{ env.PR_URL }}
         run: |
