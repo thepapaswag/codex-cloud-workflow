@@ -51,11 +51,10 @@ jobs:
             --draft \
             --title "Codex: Issue #${ISSUE_NUM} — ${ISSUE_TITLE}" \
             --body $'Closes #${ISSUE_NUM}\n\nBootstrap PR for Codex Cloud. See `.codex/tasks/issue-'"${ISSUE_NUM}"'.md` for the spec snapshot.' \
-            --json url --jq .url)
+            | tail -n1)
           echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
       - name: Summon Codex on the PR
         env:
           PR_URL: ${{ env.PR_URL }}
         run: |
           gh pr comment "$PR_URL" --body "@codex review"
-

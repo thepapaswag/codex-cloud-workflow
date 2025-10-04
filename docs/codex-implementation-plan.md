@@ -4,6 +4,8 @@ Status legend: [ ] pending · [~] in progress · [x] done
 
 Primary objective: Stand up the full mini‑project workflow so that a labeled Issue (`codex:ready`) automatically opens a draft PR and summons `@codex review`, with guardrails and machine‑readable standards in place, and batching enabled via Make/Just and scripts.
 
+Usage note: This repository acts as a bootstrap template; routine Codex Cloud work will happen in downstream projects cloned from here. Proofing/batch phases remain for validation, not day‑to‑day operations.
+
 ---
 
 ## Phase 0 — Preflight
@@ -17,24 +19,24 @@ Deliverables check: none (environment only)
 ---
 
 ## Phase 1 — Repository Scaffold (files & structure)
-- [ ] Create directories:
+- [x] Create directories:
   - `.github/ISSUE_TEMPLATE/`
   - `.github/workflows/`
   - `scripts/codex/`
   - `templates/`
   - `docs/historical/`
   - `codex/standards/` (placeholder or submodule path)
-- [ ] Add files:
-  - [ ] `.github/ISSUE_TEMPLATE/codex-task.yml`
-  - [ ] `.github/workflows/codex-dispatch.yml`
-  - [ ] `.github/workflows/spec-police.yml`
-  - [ ] `.github/pull_request_template.md`
-  - [ ] `scripts/codex/bootstrap_labels.sh` (idempotent)
-  - [ ] `scripts/codex/batch_issues.sh` (CSV with `body_or_file` + preamble columns)
-  - [ ] `templates/issue_body.md`
-  - [ ] `AGENTS.md` (with machine‑readable YAML block)
-  - [ ] One of: `Makefile` or `Justfile` (include Makefile if unsure)
-  - [ ] `docs/README.md` (quickstart + one‑time reminders)
+- [x] Add files:
+  - [x] `.github/ISSUE_TEMPLATE/codex-task.yml`
+  - [x] `.github/workflows/codex-dispatch.yml`
+  - [x] `.github/workflows/spec-police.yml`
+  - [x] `.github/pull_request_template.md`
+  - [x] `scripts/codex/bootstrap_labels.sh` (idempotent)
+  - [x] `scripts/codex/batch_issues.sh` (CSV with `body_or_file` + preamble columns)
+  - [x] `templates/issue_body.md`
+  - [x] `AGENTS.md` (with machine‑readable YAML block)
+  - [x] One of: `Makefile` or `Justfile` (include Makefile if unsure)
+  - [x] `docs/README.md` (quickstart + one‑time reminders)
 
 Acceptance mapping:
 - Structure matches spec skeleton (DoD: Structural)
@@ -42,8 +44,8 @@ Acceptance mapping:
 ---
 
 ## Phase 2 — Standards & AGENTS (governance)
-- [ ] Vendor or placeholder for `codex/standards/`.
-- [ ] Author `AGENTS.md` including YAML keys:
+- [x] Vendor or placeholder for `codex/standards/`.
+- [x] Author `AGENTS.md` including YAML keys:
   - `branch_hint`, `path_allowlist`, `pr_limits`, `validation`, `git_policy`, `debt_policy`, `commit_conventions`, `branching`, `testing`, `linting`, `security`, `pr_policy`, `adr`, `release`, `docs.entry_points`, `docs.archive_dir`.
 
 Acceptance mapping:
@@ -52,10 +54,10 @@ Acceptance mapping:
 ---
 
 ## Phase 3 — Issue Form & Templates
-- [ ] Write `.github/ISSUE_TEMPLATE/codex-task.yml` with fields:
+- [x] Write `.github/ISSUE_TEMPLATE/codex-task.yml` with fields:
   - Objective, Light Spec, Size (S/M/L), Commands to Validate, Target branch
   - Codex Cloud Task Preamble: Environment, Setup, Tasks, Artifacts
-- [ ] Write `templates/issue_body.md` to render Objective/Spec/Allowlist/Validation + Preamble sections.
+- [x] Write `templates/issue_body.md` to render Objective/Spec/Allowlist/Validation + Preamble sections.
 
 Acceptance mapping:
 - Issue form contains Preamble fields; template renders Preamble (DoD: Structural)
@@ -63,14 +65,14 @@ Acceptance mapping:
 ---
 
 ## Phase 4 — Workflows (Zero‑Click bridge + CI guardrails)
-- [ ] Implement `.github/workflows/codex-dispatch.yml`:
+- [x] Implement `.github/workflows/codex-dispatch.yml`:
   - Triggers on Issues labeled `codex:ready`.
   - Creates branch `codex/issue-<n>` from default branch.
   - Writes sentinel `.codex/tasks/issue-<n>.md` including URL, title, and body snapshot.
   - Opens draft PR titled `Codex: Issue #<n> — <title>` with body `Closes #<n>` and pointer to sentinel.
   - Comments `@codex review` on the PR.
   - Permissions: `contents: write`, `pull-requests: write`, `issues: write`.
-- [ ] Implement `.github/workflows/spec-police.yml`:
+- [x] Implement `.github/workflows/spec-police.yml`:
   - Enforce path allowlist via regex (e.g., `^(api/|docs/)`).
   - Run validation commands (e.g., `pytest -q`, `make -s docs`).
 
@@ -81,14 +83,14 @@ Acceptance mapping:
 ---
 
 ## Phase 5 — Scripts & Batching Flow
-- [ ] `scripts/codex/bootstrap_labels.sh`:
+- [x] `scripts/codex/bootstrap_labels.sh`:
   - Creates/updates labels: `codex:ready`, `automation`, `size:S`, `size:M`, `size:L`.
   - Safe to re‑run; exit non‑zero on unexpected failures.
-- [ ] `scripts/codex/batch_issues.sh`:
+- [x] `scripts/codex/batch_issues.sh`:
   - CSV schema: `title,size,branch,allowlist,tests,body_or_file,preamble_env,preamble_setup,preamble_tasks,preamble_artifacts`.
   - If `body_or_file` is a path, ingest file contents; else treat as literal.
   - Use `envsubst` to fill `templates/issue_body.md` and `gh issue create` with labels `codex:ready,automation,size:<S|M|L>`.
-- [ ] Makefile targets:
+- [x] Makefile targets:
   - `check`: verify `gh` and `codex`.
   - `labels`: run bootstrap script.
   - `codex-bootstrap`: ensure skeleton + one‑time reminders.
@@ -101,11 +103,11 @@ Acceptance mapping:
 ---
 
 ## Phase 6 — Documentation & Quickstart
-- [ ] `docs/README.md` includes Quickstart and reminders:
+- [x] `docs/README.md` includes Quickstart and reminders:
   1) Enable Issues (if off)
   2) Ensure Actions token permissions match workflows
   3) Connect repo to Codex Cloud so `@codex` on PRs works
-- [ ] Explain `make codex-bootstrap`, `make labels`, `make proof`, `make batch`.
+- [x] Explain `make codex-bootstrap`, `make labels`, `make proof`, `make batch`.
 
 Acceptance mapping:
 - README contains required reminders (DoD: Safety & Public Readiness)
@@ -174,4 +176,3 @@ Acceptance mapping:
 - Assume GitHub Free; Actions minutes limited on private repos.
 - Push early and pin branch in prompts; Codex Cloud crawls remote.
 - Keep diffs small; follow conventional commits; respect allowlists.
-
