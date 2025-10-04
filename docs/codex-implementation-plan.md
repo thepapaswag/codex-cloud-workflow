@@ -188,14 +188,15 @@ Acceptance mapping:
 Goal: demonstrate that a typical downstream project can run Codex Cloud tasks CPU-only, with predictable dependency setup and zero-click bridge behavior.
 
 Checklist
-- [ ] Create an issue via the form that updates a doc only, with Preamble:
+- [x] Create an issue via the form that updates a doc only, with Preamble:
   - Environment: `source .codex/cloud.env`
   - Setup: `bash .codex/setup.sh`
-- [ ] Confirm the dispatch workflow creates `codex/issue-<n>` and (if permitted) a draft PR; otherwise, it comments instructions.
-- [ ] Open the PR manually if auto-creation is blocked; comment `@codex review`.
-- [ ] Observe Codex Cloud execution; verify it sources `.codex/cloud.env` and runs `.codex/setup.sh` (artifacts/logs or PR comments).
-- [ ] Ensure the change is limited to allowlisted paths; CI/Spec Police behavior is as expected.
-- [ ] Merge the PR.
+- [x] Confirm the dispatch workflow creates `codex/issue-<n>` and (if permitted) a draft PR; otherwise, it comments instructions.
+  - Confirmed: auto-PR now working (e.g., PR #10). Earlier runs fell back to comment; workflow hardened to always summon.
+- [x] Open the PR manually if auto-creation is blocked; comment `@codex review`.
+- [x] Observe Codex Cloud execution; verify it sources `.codex/cloud.env` and runs `.codex/setup.sh` (preamble present; Codex ack on PR #4).
+- [x] Ensure the change is limited to allowlisted paths; CI/Spec Police behavior is as expected.
+- [x] Merge the PR.
 
 Batch path
 - [ ] Prepare a multi-row `codex_tasks.csv` and matching `.codex/preambles/*.md` entries that include the Environment/Setup Preamble.
