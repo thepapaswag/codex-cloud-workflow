@@ -56,8 +56,17 @@ jobs:
           STATUS=$?
           set -e
           if [ $STATUS -eq 0 ]; then
-            PR_URL=$(echo "$CREATE_OUT" | tail -n1)
-            echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
+            # gh pr create output may include extra lines; extract a URL if present, else resolve via head branch
+            PR_URL=$(echo "$CREATE_OUT" | grep -Eo 'https://github.com/[^ ]+/pull/[0-9]+' | tail -n1 || true)
+            if [ -z "$PR_URL" ]; then
+              PR_URL=$(gh pr list --repo "$REPO" --head "$BRANCH" --json url --jq '.[0].url' 2>/dev/null || true)
+            fi
+            if [ -n "$PR_URL" ]; then
+              echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
+            else
+              echo "PR_URL=" >> "$GITHUB_ENV"
+              gh issue comment "$ISSUE_NUM" --body $'PR likely created but URL not captured. Please open the PR for `codex/issue-'"${ISSUE_NUM}"'` into `'$BASE_BRANCH'` and comment `@codex review`.'
+            fi
           else
             echo "PR_URL=" >> "$GITHUB_ENV"
             gh issue comment "$ISSUE_NUM" --body $'Could not auto-create PR (likely org policy). Branch created: `codex/issue-'"${ISSUE_NUM}"'`.\n\nPlease open a PR from that branch into `'$BASE_BRANCH'` and comment `@codex review` on the PR.'
