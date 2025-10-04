@@ -19,6 +19,9 @@ jobs:
             echo "Touched files outside allowlist"; exit 1; } || true
       - name: Run validation commands
         run: |
-          pytest -q
+          if command -v pytest >/dev/null 2>&1 && [ -d tests ]; then
+            pytest -q || exit 1
+          else
+            echo "Skipping pytest: no tests/ directory or pytest not installed"
+          fi
           make -s docs
-

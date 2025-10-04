@@ -1,5 +1,8 @@
 # Repo Bootstrap Quickstart (Codex Mini‑Project)
 
+## Purpose
+This repository is a lightweight bootstrap template for establishing a Codex‑friendly workflow in any project. It includes zero‑click Issue → draft PR bridging, guardrails (scope + validation), and a CPU‑only cloud environment layer so Codex Cloud can run reproducibly without relying on local GPUs. Clone or reuse this template in downstream repos where you want Codex Cloud to execute routine work.
+
 This repo is wired for a zero‑click Codex flow: label an Issue `codex:ready` and a GitHub Action opens a draft PR and comments `@codex review`. Guardrails (allowlists, validation checks) and machine‑readable standards (`AGENTS.md`) are included.
 
 ## One‑Time Reminders (per repo)
