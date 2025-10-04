@@ -43,7 +43,7 @@ jobs:
           EOF
           git add .codex/tasks/issue-${ISSUE_NUM}.md
           git commit -m "chore: codex bootstrap for issue #${ISSUE_NUM}"
-          git push --set-upstream origin "$BRANCH"
+          git push --force-with-lease --set-upstream origin "$BRANCH"
           PR_URL=$(gh pr create \
             --repo "$REPO" \
             --base "${BASE_BRANCH}" \
