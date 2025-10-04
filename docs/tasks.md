@@ -29,7 +29,7 @@ Use this list to track remaining work now that Codex is connected and CPU-only c
 - [x] Adjust allowlist or commands as project needs (skip pytest if tests/ missing)
 
 ## Follow-ups
-- [ ] Decide whether to keep sample files (`.codex/preambles/*`, `codex_tasks.csv`) or move them under `examples/`
+- [x] Decide whether to keep sample files (`.codex/preambles/*`, `codex_tasks.csv`) or move them under `examples/` (moved sample preamble)
 - [ ] Consider adding per-stack examples (Torch/TensorFlow/JAX CPU) in project templates
 
 ## Auto-PR capability
