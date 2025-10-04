@@ -115,8 +115,8 @@ Acceptance mapping:
 ---
 
 ## Phase 7 — Proofing (recommended)
-- [ ] Create a tiny Issue via the form; label `codex:ready`.
-- [ ] Observe Dispatch → branch + draft PR + `@codex review` comment.
+- [x] Create a tiny Issue via the form; label `codex:ready`.
+- [x] Observe Dispatch → branch created. Org policy blocks auto PR; workflow now comments instructions to open PR and `@codex review`.
 - [ ] Tune allowlist regex if bootstrap files cause noise.
 
 Acceptance mapping:
@@ -125,9 +125,9 @@ Acceptance mapping:
 ---
 
 ## Phase 8 — Batch Ready
-- [ ] Run `make batch` to generate a sample `codex_tasks.csv` + `.codex/preambles/<slug>.md`.
-- [ ] Create a few Issues from CSV; verify body includes Preamble.
-- [ ] Confirm dispatch opens draft PRs for created Issues.
+- [x] Run `make batch` to generate a sample `codex_tasks.csv` + `.codex/preambles/<slug>.md`. (Executed with one sample row)
+- [x] Create a few Issues from CSV; verify body includes Preamble. (Issue #2 created)
+- [x] Confirm dispatch creates branch and posts instructions when PR creation is blocked by policy.
 
 Acceptance mapping:
 - Issues render preamble; workflows trigger as expected (DoD: Zero‑Click & Preamble Behavior)
