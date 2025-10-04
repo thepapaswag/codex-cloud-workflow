@@ -1,2 +1,2 @@
 title,size,branch,allowlist,tests,body_or_file,preamble_env,preamble_setup,preamble_tasks,preamble_artifacts
-Add purpose section to docs,S,main,docs/,-, .codex/preambles/sample-docs-task.md,,,,-
+Add purpose section to docs,S,main,docs/,-,examples/preambles/sample-docs-task.md,,,,-
